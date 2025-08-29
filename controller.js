@@ -54,9 +54,10 @@ const catalog = {
     bottoms: {
         icon: "img/icons/tops.png",
         items: [
-            { image: "img/tops/top_1.png"
+            {
+                image: "img/tops/top_1.png"
                 , thumb: ""
-             },
+            },
             { image: "img/tops/top_2.png" }
         ]
     },
@@ -151,33 +152,62 @@ function buildMenuItems(category) {
 =============================== */
 
 const canvas = $("#stage").get(0);
+const container = document.querySelector('#stageContainer');
 const context = canvas.getContext('2d')
 
 const base = new Image()
 
 
 function initStage() {
+
+    //set up base image
     base.onload = () => {
         console.log('Base image loaded!');
-        // Now that the image is loaded, its dimensions are available
+
         canvas.width = base.naturalWidth;
         canvas.height = base.naturalHeight;
 
-        // Add the base image to our cache
+
         itemCache[base.src] = base;
 
-        // Perform the initial draw
+
         drawOrder();
     };
 
-    // Set up an error handler
     base.onerror = () => {
         console.error("Failed to load the base image.");
     };
 
-    // Now, start loading the image
     base.src = catalog.base;
 
+    //canvas setting
+    window.addEventListener('resize', resizeCanvas);
+
+    resizeCanvas()
+
+}
+
+function resizeCanvas() {
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+    const imageAspectRatio = base.naturalWidth / base.naturalHeight;
+
+    let newWidth, newHeight;
+
+    if (containerWidth / containerHeight > imageAspectRatio) {
+
+        newHeight = containerHeight;
+        newWidth = newHeight * imageAspectRatio;
+    } else {
+
+        newWidth = containerWidth;
+        newHeight = newWidth / imageAspectRatio;
+    }
+
+    canvas.style.width = `${newWidth}px`;
+    canvas.style.height = `${newHeight}px`;
+
+    drawOrder();
 }
 
 //example data = {thumb: "/img/path/test.png", image: "/img/path/actualImage.png"  }

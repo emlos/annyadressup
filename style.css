@@ -1,66 +1,73 @@
  :root {
-     --sidebar-width: 240px;
-     --thumb-width: 90px;
+     --thumb-width: 10vw;
+     --border-color: #ddd;
  }
 
  * {
      box-sizing: border-box;
+     padding: 0;
+     margin: 0;
  }
 
  body {
-     margin: 0;
-     font-family: system-ui, sans-serif;
-     background: #fafafa;
-     display: flex;
-     justify-content: center;
-     padding: 1rem;
+     width: 100vw;
+     height: 100vh;
  }
 
  #game {
      display: flex;
-     gap: 1rem;
-     max-width: 1000px;
+     gap: 1vw;
+
      width: 100%;
+     height: 100%;
  }
 
  /* ───────── Sidebar (tabs + items) ───────── */
  #sidebar {
-     width: var(--sidebar-width);
      background: #fff;
-     border: 1px solid #ddd;
-     border-radius: 0.75rem;
-     padding: .75rem;
+     border: 1px solid var(--border-color);
+
+     padding: 0;
+
      display: flex;
      flex-direction: row;
-     /* Changed from 'column' to 'row' */
-     gap: .75rem;
-     /* Added gap between tabs and items */
      overflow: hidden;
+
  }
 
  #tabs {
      display: flex;
      flex-direction: column;
-     /* Changed to 'column' to stack tabs vertically */
      gap: .5rem;
-     /* margin-bottom is no longer needed */
+     padding: .75rem 0 .75rem .75rem;
+     /* Add padding here instead of sidebar */
  }
 
  #tabs button {
-     /* flex: 1; was removed to prevent vertical stretching */
      padding: .25rem;
-     border: 1px solid #ddd;
+     border: 1px solid var(--border-color);
      background: #f5f5f5;
-     border-radius: .5rem;
+
      cursor: pointer;
      width: 48px;
-     /* Set a fixed width for the tab column */
      height: 48px;
-     transition: background .2s;
+     transition: background 1s;
+     position: relative;
  }
 
- #tabs button.active,
- #tabs button:hover {
+ /* This is the key change for the "merged" look */
+ #tabs button.active {
+     background: #fff;
+     /* Match the content area background */
+     border-right-color: #fff;
+     /* Make the right border "disappear" */
+     margin-right: -1px;
+     /* Overlap the content area's border */
+     z-index: 1;
+     /* Ensure the active tab is on top */
+ }
+
+ #tabs button:not(.active):hover {
      background: #e0e0e0;
  }
 
@@ -73,10 +80,10 @@
 
  /* Masonry‑ish grid */
  #itemsContainer {
-     flex: 1;
      overflow-y: auto;
      column-count: 2;
      column-gap: .5rem;
+     padding: .75rem;
  }
 
  .item-thumb {
@@ -97,15 +104,19 @@
  }
 
  /* ───────── Stage ───────── */
- .stage {
+ #stageContainer {
      position: relative;
-     flex: 1;
-     max-width: 600px;
      background: #fff;
-     border: 1px solid #ddd;
-     border-radius: 0.75rem;
+     border: 1px solid var(--border-color);
+
      overflow: hidden;
      display: flex;
+     flex-grow: 1;
      justify-content: center;
      align-items: center;
+ }
+
+ #stage {
+     max-width: 100%;
+     max-height: 100%;
  }
